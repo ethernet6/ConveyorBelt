@@ -55,7 +55,7 @@ public class WorkerBeltFactory {
         };
         double[] discreteProbabilities = new double[]{0.4, 0.2, 0.2, 0.2};
 
-        int SimulationLength = 10;
+        int SimulationLength = 100;
         int ConveyorLength = 5;
 
         //CreateComponent(discreteProbabilities, AssetsToGenerate);
@@ -112,17 +112,34 @@ public class WorkerBeltFactory {
 
                 if (DoActionsConflict(action01, action02)) {
                     belt = ResolveAction(belt, x, workers1, workers2, b);
-                } else {
+                } 
+                
+                if (action02 == 4 && action01 == 4) {
+                        System.out.println("ATX 404");
+                        //belt = workers1[b].AcquireMatchingComponent(belt, x);
+                        
+                    }
+                
+                
+                else {
 
                     Random randomGenerator = new Random();
-                    if (action02 == 0) {
-                        belt = workers1[b].AcquireMatchingComponent(belt, x);
+                    if (action02 == 0 && action01 == 0) {
+                        workers1[b].showBlocks();
                         workers2[b].showBlocks();
                     } 
                     
-                    if(action01 == 0){
+                     
+                    
+                    if(action01 == 0 && action02 > 0){
                         workers1[b].showBlocks();
                         belt = workers2[b].AcquireMatchingComponent(belt, x);
+                    }
+                    
+                    if(action01 > 0 && action02 == 0){
+                        
+                        belt = workers1[b].AcquireMatchingComponent(belt, x);
+                        workers2[b].showBlocks();
                     }
 
                 }

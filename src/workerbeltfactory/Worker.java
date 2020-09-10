@@ -265,7 +265,8 @@ public class Worker {
     void DepositProduct(Conveyor c){
         
         System.out.println("attempt to deposit");
-        if(!c.BeltSlots[WorkerId].isLocked && isEmpty( c.BeltSlots[WorkerId]) ){
+        System.out.println("CaL: " +c.BeltSlots[WorkerId].type);
+        if(isEmpty( c.BeltSlots[WorkerId]) ){
         
             c.lockSlot(WorkerId);
             c.BeltSlots[WorkerId] = product;
@@ -280,7 +281,7 @@ public class Worker {
                 RightHandEmpty = true;
                 ProductMade = false;
            // c.BeltSlots[WorkerId].isLocked = false;
-        }
+       }
         
         
         
