@@ -56,14 +56,15 @@ public class WorkerBeltFactory {
         double[] discreteProbabilities = new double[]{0.4, 0.2, 0.2, 0.2};
 
         int SimulationLength = 100;
-        int ConveyorLength = 5;
+        int ConveyorLength = 14;
+        int WorkstationsUsed = 2;
 
         //CreateComponent(discreteProbabilities, AssetsToGenerate);
         // Deploy workers
-        Worker[] workers1 = new Worker[5];
-        Worker[] workers2 = new Worker[5];
+        Worker[] workers1 = new Worker[WorkstationsUsed];
+        Worker[] workers2 = new Worker[WorkstationsUsed];
 
-        for (int a = 0; a < 5; a++) {
+        for (int a = 0; a < WorkstationsUsed; a++) {
 
             workers1[a] = new Worker(a);
             workers2[a] = new Worker(a, 2);
@@ -75,7 +76,7 @@ public class WorkerBeltFactory {
         //n += 1;
         System.out.println("");
 
-        Conveyor belt = new Conveyor();
+        Conveyor belt = new Conveyor(ConveyorLength);
 
         //System.out.println("Belt LL " + belt.BeltSlots.length);
         //belt.AddComponentToBelt(discreteProbabilities, AssetsToGenerate);
@@ -88,14 +89,14 @@ public class WorkerBeltFactory {
             //CreateComponent(discreteProbabilities,AssetsToGenerate);
             System.out.println("Step " + (x + 1));
 
-            if (x > 0) {
-                belt.MoveBelt();
-            }
+            
 
             belt.AddComponentToBelt(discreteProbabilities, AssetsToGenerate);
             System.out.println("Before ACQ");
             belt.ShowBeltState();
             System.out.println("");
+            
+            System.out.println("wwqa "+ workers1.length);
 
             for (int b = 0; b < workers1.length; b++) {
 
@@ -107,6 +108,10 @@ public class WorkerBeltFactory {
                 int action01 = workers1[b].ProposeAction(belt, x);
                 int action02 = workers2[b].ProposeAction(belt, x);
 
+                
+                //int action01 = 2;
+                //int action02 = 3;        
+                
                 System.out.println("ac " + action01);
                 System.out.println("ac " + action02);
 
@@ -157,11 +162,21 @@ public class WorkerBeltFactory {
 
             }
 
+            if (x >= 0) {
+                belt.MoveBelt();
+            }
+
             //if()
             System.out.println("After ACQ");
             belt.ShowBeltState();
 
-        }
+        } // END OF SIMULATION
+        
+        System.out.println("");
+        System.out.println("");
+        System.out.println("END OF SIMULATION");
+        System.out.println("");
+        belt.ComputeStats();
 
     }
 

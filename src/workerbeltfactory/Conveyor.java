@@ -95,6 +95,77 @@ public class Conveyor {
     
     }
     
+    void ComputeStats(){
+    
+    
+        System.out.println("Number of Objects (including empty slots)");
+        System.out.println(BeltsEnd.size());
+        System.out.println("");
+        int acomp = 0;
+        int bcomp = 0;
+        int ccomp = 0;
+        
+        int ncomp = 0;
+        
+        int pcomp = 0;
+        int qcomp = 0;
+        
+        
+         //HashMap<Component, String> hmap = new HashMap<Component, String>();
+        
+        for(int a = 0; a < BeltsEnd.size() ; a++){
+            
+            //hmap.put(BeltsEnd.get(a) , BeltsEnd.get(a).type );
+            
+            
+            if(BeltsEnd.get(a).type == "P"){
+            
+                pcomp++;
+            }
+            
+            if(BeltsEnd.get(a).type == "Q"){
+            
+                qcomp++;
+            }
+            
+            if(BeltsEnd.get(a).type == "A"){
+            
+                acomp++;
+            }
+            
+            if(BeltsEnd.get(a).type == "B"){
+            
+                bcomp++;
+            }
+            
+            if(BeltsEnd.get(a).type == "C"){
+            
+                ccomp++;
+            }
+            
+            if(BeltsEnd.get(a).type == "N"){
+            
+                ncomp++;
+            }
+            
+            
+        }
+        
+        int products = pcomp + qcomp;
+        
+        System.out.println("Products Made " + products);
+        
+        System.out.println("Components not used : " + (BeltsEnd.size() - products) );
+        System.out.println("");
+        
+        System.out.println("A Type: " + acomp);
+        System.out.println("B Type: " + bcomp);
+        System.out.println("C Type: " + ccomp);
+        System.out.println("[N] Type: " + ncomp);
+        
+        
+    }
+    
     void AddComponentToBelt(double p [], Component a[]) {
 
         double probs[] = p;
