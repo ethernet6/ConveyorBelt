@@ -356,5 +356,8 @@ public class Worker {
         //return flag;
         return vote[0];
     }
+        
+        
+       
 
 }

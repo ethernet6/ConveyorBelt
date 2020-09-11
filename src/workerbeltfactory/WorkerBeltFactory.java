@@ -13,6 +13,100 @@ import java.security.SecureRandom;
  * @author James Purcell Date: 6 Sept 2020 Sunday
  */
 public class WorkerBeltFactory {
+    
+    Component[] parts;
+    double[] Probabilities;
+    Worker[] row1;
+    Worker[] row2;
+    
+    int Workstations;
+    
+    Conveyor Conveyorbelt;
+    
+    int BeltLength;
+    
+    int SimulationLength;
+    
+    
+    WorkerBeltFactory(Component[] cmp, double[] pb){
+        
+      parts = cmp;
+      Probabilities = pb;
+      
+    
+    }
+    
+    void PopulateWorkers( int WorkstationsUsed){
+    
+        
+        row1 = new Worker[WorkstationsUsed];
+      row2 = new Worker[WorkstationsUsed];
+      Workstations = WorkstationsUsed;
+      
+        for (int a = 0; a < Workstations; a++) {
+
+            row1[a] = new Worker(a);
+            row2[a] = new Worker(a, 2);
+        }
+    }
+    
+    void CreateBelt(int m_beltLength){
+    
+        Conveyorbelt = new Conveyor(m_beltLength);
+        BeltLength = m_beltLength;
+    }
+    
+    void SetSimulationLength(int SimTime){
+    
+        SimulationLength = SimTime;
+    }
+    
+    void SetupSimulation(int w, int b , int s){
+    
+        PopulateWorkers(w);
+        CreateBelt(b);
+        SetSimulationLength(s);
+        
+    
+    }
+    
+    void RunSimulation(){
+    
+        for(int x=0; x< SimulationLength; x++){
+            
+            Conveyorbelt.tick = x;
+            
+            System.out.println("Step " + (x + 1));
+            
+            Conveyorbelt.AddComponentToBelt(Probabilities, parts);
+            
+            System.out.println("Before ACQ");
+            Conveyorbelt.ShowBeltState();
+            System.out.println("");
+            
+            for (int b = 0; b < Workstations; b++) {
+                
+                Action a1 = new Action();
+            
+            Conveyorbelt = a1.getActions(row1[b], row2[b], Conveyorbelt, b);
+            
+            
+            }
+            
+            Conveyorbelt.MoveBelt();
+            
+            System.out.println("After ACQ");
+            Conveyorbelt.ShowBeltState();
+        
+        }
+        
+        System.out.println("");
+        System.out.println("");
+        System.out.println("END OF SIMULATION");
+        System.out.println("");
+        Conveyorbelt.ComputeStats();
+    
+    }
 
     /**
      * @param args the command line arguments
@@ -20,39 +114,17 @@ public class WorkerBeltFactory {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        //Random rand = new Random();
-        SecureRandom rand = new SecureRandom();
-        int fd = 10;
-        /*
-        for (int t = 0; t < 15; t++) {
-            Double n = rand.nextDouble();
-            //int n = rand.nextInt(5);
-            //n += 1;
-
-            if (n < .4) {
-                // fd = 1; System.out.println("A " + n);
-            }
-            if (n >= .4 && n < .6) {
-                //fd = 2; System.out.println("B " + n);
-            }
-            if (n >= .6 && n < .8) {
-                //fd = 3; System.out.println("C " + n);
-            }
-            if (n >= .8) {
-                //fd = 4; System.out.println("N " + n);
-            }
-
-            //System.out.println("RN " + n);
-        }
-         */
-
-        //String[] AssetsToGenerate = new String[] { "A",   "B",    "C",   "N"};
+        
+       
+        
+        
         Component[] AssetsToGenerate = new Component[]{
             new Component("A"),
             new Component("B"),
             new Component("C"),
             new Component("N")
         };
+        
         double[] discreteProbabilities = new double[]{0.4, 0.2, 0.2, 0.2};
 
         int SimulationLength = 100;
@@ -70,18 +142,12 @@ public class WorkerBeltFactory {
             workers2[a] = new Worker(a, 2);
         }
 
-        SecureRandom WorkerSearch = new SecureRandom();
-        //Double n = rand.nextDouble();
-
-        //n += 1;
+        
         System.out.println("");
 
         Conveyor belt = new Conveyor(ConveyorLength);
 
-        //System.out.println("Belt LL " + belt.BeltSlots.length);
-        //belt.AddComponentToBelt(discreteProbabilities, AssetsToGenerate);
-        System.out.println("Belt at 0 " + belt.BeltSlots[0]);
-        System.out.println("Belt at 3 " + belt.BeltSlots[3]);
+        
 
         //start simulation
         for (int x = 0; x < SimulationLength; x++) {
@@ -100,8 +166,7 @@ public class WorkerBeltFactory {
 
             for (int b = 0; b < workers1.length; b++) {
 
-                int WorkerSelection = WorkerSearch.nextInt(2);
-                //System.out.println("ws " + WorkerSelection);
+                
                 System.out.println("Workstation " + b);
 
                 // check action
@@ -128,7 +193,7 @@ public class WorkerBeltFactory {
                 
                 else {
 
-                    Random randomGenerator = new Random();
+                   
                     if (action02 == 0 && action01 == 0) {
                         workers1[b].showBlocks();
                         workers2[b].showBlocks();
@@ -149,16 +214,7 @@ public class WorkerBeltFactory {
 
                 }
 
-                //belt = workers1[b].AcquireMatchingComponent(belt, x);
-                //belt = workers2[b].AcquireMatchingComponent(belt, x);
-                //belt = workers1[b].AcquireMatchingComponent(belt, x);
-                if (WorkerSelection == 0) {
-
-                } else {
-
-                    //belt = workers2[b].AcquireMatchingComponent(belt, x);
-                    //belt = workers1[b].AcquireMatchingComponent(belt, x);
-                }
+                
 
             }
 
@@ -218,71 +274,5 @@ public class WorkerBeltFactory {
 
     }
 
-    static void CreateComponent1(double p[], String a[]) {
-
-        double probs[] = p;
-        String assets[] = a;
-
-        //double probs[] = new double[6];
-        //String assets[] = new String[6];
-        /*
-        probs[0] = 0.1;
-        probs[1] = 0.2;
-        probs[2] = 0.3;
-
-        probs[3] = 0.1;
-        probs[4] = 0.1;
-        probs[5] = 0.2;
-        
-        
-        assets[0] = "A";
-        assets[1] = "B";
-        assets[2] = "C";
-
-        assets[3] = "NL";
-        assets[4] = "Q";
-        assets[5] = "Z";
-         */
-        double left[] = new double[probs.length];
-        double right[] = new double[probs.length];
-
-        for (int i = 0; i < probs.length; i++) {
-
-            // left side 
-            if (i == 0) {
-
-                left[0] = 0.0;
-                right[0] = probs[0];
-
-            } else {
-
-                left[i] = left[i - 1] + probs[i - 1];
-
-                right[i] = probs[i] + right[i - 1];
-            }
-
-        }
-
-        SecureRandom rand = new SecureRandom();
-
-        for (int i = 0; i < 1; i++) {
-
-            //System.out.println("ITR " + i);
-            Double n = rand.nextDouble();
-
-            for (int j = 0; j < probs.length; j++) {
-
-                if (left[j] <= n && n < right[j]) {
-                    //System.out.println("CHK " + left[j] + " <= x <" + right[j]);
-                    System.out.println("ITR " + i + "> " + assets[j]);
-                    System.out.println("");
-
-                }
-
-            }
-
-        }
-
-    }
-
+    
 }
