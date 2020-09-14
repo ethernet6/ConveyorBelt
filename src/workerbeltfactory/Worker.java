@@ -116,13 +116,14 @@ public class Worker {
             
             System.out.println("NHF");
             if(!ProductMade){
-                System.out.println("PM WWW ON");
+                System.out.println("P=NO P=MAKE");
+                System.out.println("BELT TICK -- " + c.tick);
                 creationTick = c.tick;
                 CreateProduct(c);
             }
             
             if(ProductionTimeoutElapsed() && ProductMade){
-                System.out.println("TIMEOUT ON WWW PM");
+                System.out.println("TIMEOUT OFF && DEPOT");
                 DepositProduct(c);
             }
             

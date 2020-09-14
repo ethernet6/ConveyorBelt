@@ -6,7 +6,8 @@
 package workerbeltfactory;
 
 import java.util.Random;
-import static workerbeltfactory.WorkerBeltFactory.DoActionsConflict;
+import java.security.SecureRandom;
+
 
 /**
  *
@@ -24,11 +25,26 @@ public class Action {
     Conveyor getActions(Worker w1, Worker w2, Conveyor belt, int x) {
 
         int action01 = w1.ProposeAction(belt, x);
-        int action02 = w1.ProposeAction(belt, x);
+        int action02 = w2.ProposeAction(belt, x);
+        
+        System.out.println("A1 : "+ action01);
+        System.out.println("PM1 " + w1.ProductMade);
+        System.out.println("CR tick " + w1.creationTick);
+        System.out.println("TV: " + x);
+        System.out.println("");
+        System.out.println("A2 : "+ action02);
+         System.out.println("PM2 " + w2.ProductMade);
+         System.out.println("CR tick " + w1.creationTick);
 
         if (AreActionsConflicted(action01, action02)) {
             belt = ResolveActions(belt, x, w1, w2);
-        } else {
+        } 
+        
+        if (action02 == 4 && action01 == 4) {
+                        System.out.println("ATX 404");
+        }
+        
+        else {
 
             if (action02 == 0 && action01 == 0) {
                 w1.showBlocks();
@@ -54,8 +70,12 @@ public class Action {
         return belt;
     }
 
-    Worker UpdateWorker(Worker w) {
-        return w;
+    Worker UpdateWorker1() {
+        return ww1;
+    }
+    
+    Worker UpdateWorker2() {
+        return ww2;
     }
 
     void SetWorker(Worker w1, Worker w2) {
@@ -78,7 +98,7 @@ public class Action {
 
     Conveyor ResolveActions(Conveyor c, int SimulationTime, Worker w1, Worker w2) {
 
-        Random randomGenerator = new Random();
+        SecureRandom randomGenerator = new SecureRandom();
         if (randomGenerator.nextInt(2) > 0) {
             c = w1.AcquireMatchingComponent(c, SimulationTime);
             w2.showBlocks();
