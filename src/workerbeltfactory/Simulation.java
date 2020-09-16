@@ -36,11 +36,13 @@ public class Simulation {
         row1 = new Worker[WorkstationsUsed];
         row2 = new Worker[WorkstationsUsed];
         Workstations = WorkstationsUsed;
+        
+        Conveyorbelt.WorkerSlots = WorkstationsUsed;
 
         for (int a = 0; a < Workstations; a++) {
 
-            row1[a] = new Worker(a);
-            row2[a] = new Worker(a, 2);
+            row1[a] = new Worker(a); // populate row 1 workers
+            row2[a] = new Worker(a, 2); // populate row 2 workers
         }
     }
 
@@ -95,6 +97,7 @@ public class Simulation {
     void SetupSimulation(int w, int b, int s) {
         b = BeltLengthCheck(b);
         CreateBelt(b);
+        
         w = EnoughWorkersCheck(w,b);
         PopulateWorkers(w);
         
@@ -126,8 +129,7 @@ public class Simulation {
                 row1[b] = a1.UpdateWorker1();
                 row2[b] = a1.UpdateWorker2();
                 
-                //if(row1[b].isAHandFree()){System.out.println("R1 free hand");}
-                //if(row2[b].isAHandFree()){System.out.println("R2 free hand");}
+                
 
             }
 
@@ -148,7 +150,7 @@ public class Simulation {
 
     public static void main(String[] args) {
 
-        //WorkerBeltFactory fty = new WorkerBeltFactory();
+        
         Component[] AssetsToGenerate = new Component[]{
             new Component("A"),
             new Component("B"),
@@ -158,9 +160,9 @@ public class Simulation {
 
         double[] discreteProbabilities = new double[]{0.4, 0.2, 0.2, 0.2};
 
-        int SimulationLength = 100;
+        int SimulationLength = 1;
         int ConveyorLength = 6;
-        int WorkstationsUsed = 3;
+        int WorkstationsUsed = 6;
 
         Simulation sim = new Simulation(AssetsToGenerate, discreteProbabilities);
 

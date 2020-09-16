@@ -17,7 +17,9 @@ public class Conveyor {
     int tick;
     int BeltLength;
     Component BeltSlots[];
-    ArrayList<Component> BeltsEnd = new ArrayList<Component>();
+    ArrayList<Component> EndOfAssemblyParts = new ArrayList<Component>();
+
+    int WorkerSlots;
 
     public Conveyor() {
         BeltLength = 5;
@@ -47,15 +49,15 @@ public class Conveyor {
         int LastItemOnBelt = BeltSlots.length;
         int LastItemIndex = LastItemOnBelt - 1;
 
-        BeltsEnd.add(BeltSlots[LastItemIndex]);
-
         //Now remove item from belt
+        EndOfAssemblyParts.add(BeltSlots[LastItemIndex]);
+
         for (int a = (BeltSlots.length - 2); a >= 0; a--) {
 
             BeltSlots[a + 1] = BeltSlots[a];
         }
 
-        // insert empty component at index 0 until it is filled randomly by the 
+        // insert an empty component at index 0 until it is filled randomly by the 
         // ADD function.
         BeltSlots[0] = new Component("N");
     }
@@ -74,14 +76,35 @@ public class Conveyor {
 
     void ShowBeltState() {
 
-        System.out.print("-->| ");
+        System.out.println("v");
+        System.out.println("^");
 
+        for (int a = 0; a < WorkerSlots; a++) {
+            if (a == 0) {
+
+            }
+            System.out.print("V    ");
+        }
+        System.out.println("");
         for (int a = 0; a < BeltSlots.length; a++) {
+
+            if (a < WorkerSlots) {
+
+            }
+
+            if (a == 0) {
+                //System.out.print("-->| ");
+            }
 
             System.out.print(BeltSlots[a].type + "  | ");
 
         }
-        System.out.print("-->");
+        //System.out.print("-->");
+        System.out.println("");
+        for (int a = 0; a < WorkerSlots; a++) {
+            System.out.print("^    ");
+        }
+
         System.out.println("");
         System.out.println("");
 
@@ -90,75 +113,99 @@ public class Conveyor {
     void ComputeStats() {
 
         System.out.println("Number of Objects (including empty slots)");
-        System.out.println(BeltsEnd.size());
+        System.out.println(EndOfAssemblyParts.size());
         System.out.println("");
-        int acomp = 0;
-        int bcomp = 0;
-        int ccomp = 0;
+        double acomp = 0.0; // A type components total
+        double bcomp = 0.0; // B type components total
+        double ccomp = 0.0; // C type components total
 
-        int ncomp = 0;
+        double ncomp = 0.0; // N type components [empty slots - that passed by] total
 
-        int pcomp = 0;
-        int qcomp = 0;
+        double pcomp = 0.0; // P type products total
+        double qcomp = 0.0; // Q type products total
 
         //HashMap<Component, String> hmap = new HashMap<Component, String>();
-        for (int a = 0; a < BeltsEnd.size(); a++) {
+        for (int a = 0; a < EndOfAssemblyParts.size(); a++) {
 
-            //hmap.put(BeltsEnd.get(a) , BeltsEnd.get(a).type );
-            if (BeltsEnd.get(a).type == "P") {
+            //hmap.put(EndOfAssemblyParts.get(a) , EndOfAssemblyParts.get(a).type );
+            if (EndOfAssemblyParts.get(a).type == "P") {
 
                 pcomp++;
             }
 
-            if (BeltsEnd.get(a).type == "Q") {
+            if (EndOfAssemblyParts.get(a).type == "Q") {
 
                 qcomp++;
             }
 
-            if (BeltsEnd.get(a).type == "A") {
+            if (EndOfAssemblyParts.get(a).type == "A") {
 
                 acomp++;
             }
 
-            if (BeltsEnd.get(a).type == "B") {
+            if (EndOfAssemblyParts.get(a).type == "B") {
 
                 bcomp++;
             }
 
-            if (BeltsEnd.get(a).type == "C") {
+            if (EndOfAssemblyParts.get(a).type == "C") {
 
                 ccomp++;
             }
 
-            if (BeltsEnd.get(a).type == "N") {
+            if (EndOfAssemblyParts.get(a).type == "N") {
 
                 ncomp++;
             }
 
         }
 
-        float products = pcomp + qcomp;
+        double products = pcomp + qcomp;
+
+        double pr = 0.0;
+
+        double qr = 0.0;
+
+        if (products != 0.0) {
+
+            pr = (pcomp / products * 100);
+
+            qr = (qcomp / products * 100);
+        }
 
         System.out.println("Products Made " + products);
-        System.out.printf("P Type: " + pcomp  + "   Ratio: %.1f", (pcomp/products * 100));
+        System.out.printf("P Type: " + pcomp + "   Ratio: %.1f", pr);
         System.out.print("%");
         System.out.println("");
-        System.out.printf("Q Type: " + qcomp  + "   Ratio: %.1f", (qcomp/products * 100));
+        System.out.printf("Q Type: " + qcomp + "   Ratio: %.1f", qr);
         System.out.print("%");
         System.out.println("");
         System.out.println("-------------------------------------");
-        System.out.println("Components not used : " + ((BeltsEnd.size() - products) - ncomp) );
+        System.out.println("Components not used : " + ((EndOfAssemblyParts.size() - products) - ncomp));
         System.out.println("");
-        
-        float cmp = ((BeltsEnd.size() - products) - ncomp);
 
-        System.out.printf("A Type: " + acomp + "   Ratio: %.1f", (acomp/cmp * 100));
+        double cmp = ((EndOfAssemblyParts.size() - products) - ncomp);
+
+        double ar = 0.0;
+        double br = 0.0;
+        double cr = 0.0;
+
+        if (cmp != 0.0) {
+            ar = (acomp / cmp * 100);
+
+            br = (bcomp / cmp * 100);
+
+            cr = (ccomp / cmp * 100);
+
+        }
+
+        System.out.printf("A Type: " + acomp + "   Ratio: %.1f", ar);
         System.out.print("%");
         System.out.println("");
-        System.out.printf("B Type: " + bcomp + "    Ratio: %.1f", (bcomp/cmp * 100));
+        System.out.printf("B Type: " + bcomp + "    Ratio: %.1f", br);
         System.out.print("%");
         System.out.println("");
-        System.out.printf("C Type: " + ccomp + "    Ratio: %.1f", (ccomp/cmp * 100));
+        System.out.printf("C Type: " + ccomp + "    Ratio: %.1f", cr);
         System.out.print("%");
         System.out.println("");
         System.out.println("[N] Type: " + ncomp);
@@ -175,14 +222,15 @@ public class Conveyor {
 
         //Formulating proability ranges for the cummulative probabilities of each event/block 
         /**
-         * 
-         * Where 0.0 <= x < 0.2 for P(x) = 0.2 
-         * Where 0.2 <= x < 0.4 for P(y) = 0.3 
-         * 
+         *
+         * Where 0.0 <= x < 0.2 for P(x) = 0.2 Where 0.2 <= x < 0.4 for P(y) =
+         * 0.3
+         *
          * etc.
-         * 
+         *
          * Where P(x) + P(y) ... P(n) = 1
-         **/
+         *
+         */
         for (int i = 0; i < probs.length; i++) {
 
             // left side 
@@ -204,7 +252,6 @@ public class Conveyor {
 
         for (int i = 0; i < 1; i++) {
 
-            
             Double n = rand.nextDouble();
 
             for (int j = 0; j < probs.length; j++) {
@@ -213,16 +260,13 @@ public class Conveyor {
                     // using the probabilities provided the item must fall between 
                     // a set range of probability that is equal to its likelihood of 
                     // occurring.
-                    
+
                     // eg. left[j] <= n && n < right[j]
                     // is the same as 0.8 <= to 1 for P(x) = 0.2
-                    
                     // A random number between 0 and  1 is chosen and if it falls between this range
                     // then the block accoreded this range is the block set as output.
                     
-                    //System.out.println("@Conveyor Asset Type: " + assets[j].type);
-                    
-                    if(!BeltSlots[0].type.equals("N")){
+                    if (!BeltSlots[0].type.equals("N")) {
                         MoveBelt(); // If there is a component at the start of the belt then move the belt to make room for a new component
                     }
                     BeltSlots[0] = assets[j];

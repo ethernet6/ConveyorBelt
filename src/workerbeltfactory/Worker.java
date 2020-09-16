@@ -20,10 +20,10 @@ public class Worker {
     int WorkerId; // index of the worker array used as an ID
     int SideOfBelt = 1;
 
-    Component alpha; // type A
-    Component beta;  // type B or C
+    Component alpha; // type A (Left hand of the assembly worker)
+    Component beta;  // type B or C (Right hand of the assembly worker)
 
-    Component product; 
+    Component product;
 
     String alphaType = "A"; // String to check for A type components
     String betaTypeOne = "B"; // String to check for B type components
@@ -33,8 +33,7 @@ public class Worker {
 
     String madeProductOne = "P"; // String to create P component
     String madeProductTwo = "Q"; // String to create Q component
-     
-    
+
     int creationTick; // Simulation time when product assembly starts
     int ProductionTime = 4; // timeout to wait 4 conveyor movements to simulate assembly time
     int CurrentTick; // Current simulation time
@@ -46,12 +45,12 @@ public class Worker {
         ComponentA_Collected = false;
         ProductMade = false;
         WorkerId = n;
-        
-        alpha =new Component("N");
-        beta =new Component("N");;
+
+        alpha = new Component("N");
+        beta = new Component("N");;
 
     }
-    
+
     Worker(int n, int row) {
         LeftHandEmpty = true;
         RightHandEmpty = true;
@@ -59,9 +58,9 @@ public class Worker {
         ComponentA_Collected = false;
         ProductMade = false;
         WorkerId = n;
-        
-        alpha =new Component("N");
-        beta =new Component("N");;
+
+        alpha = new Component("N");
+        beta = new Component("N");;
         SideOfBelt = row;
         //ProductionTime = atime;
 
@@ -69,103 +68,92 @@ public class Worker {
 
     Conveyor AcquireMatchingComponent(Conveyor c, int simTick) {
 
-        //boolean flag = false;
         
         CurrentTick = simTick;
-
+//is a component ? Check the item selected is not an empty [component] slot
         if (isComponent(c.BeltSlots[WorkerId]) && isAHandFree() && !c.BeltSlots[WorkerId].isLocked) {
 
-            //is a component ?
             
-            //System.out.println("IS COMP?" + SideOfBelt);
-            
-            
+            // Check the component and check if it is an A type and if it is required
             boolean isComponentA = isComponentTypeA(c.BeltSlots[WorkerId]);
             if (isComponentA && !ComponentA_Collected && !c.BeltSlots[WorkerId].isLocked) {
 
-                //c.lockSlot(WorkerId);
-
+                
                 alpha = c.BeltSlots[WorkerId];
                 ComponentA_Collected = true;
                 LeftHandEmpty = false;
                 RemoveComponent(c);
-                
-                //c.unlockSlot(WorkerId);
-                
-                //flag = true;
-            }
-            if (!isComponentA &&!c.BeltSlots[WorkerId].isLocked && !ComponentT_Collected) {
 
-                //c.lockSlot(WorkerId);
+                
+            }
+            if (!isComponentA && !c.BeltSlots[WorkerId].isLocked && !ComponentT_Collected) {
+                    // Check the component and check if it is an B or C type and if it is required
+                
                 beta = c.BeltSlots[WorkerId];
                 ComponentT_Collected = true;
                 RightHandEmpty = false;
                 RemoveComponent(c);
+
                 
-                //c.unlockSlot(WorkerId);
-                //flag = true;
             }
-            
-            
-            /*if(c.BeltSlots[WorkerId].isLocked){
-                 System.out.println("Locked by W:"+ WorkerId + "");
-            }*/
+
+           
         }
-        
-        if(!isAHandFree()){
-            
-            //System.out.println("NHF");
-            if(!ProductMade){
-                //System.out.println("P=NO P=MAKE");
-                //System.out.println("BELT TICK -- " + c.tick);
+
+        if (!isAHandFree()) {
+
+           
+            if (!ProductMade) {
+                
                 creationTick = c.tick;
                 CreateProduct(c);
             }
-            
-            if(ProductionTimeoutElapsed() && ProductMade){
-                //System.out.println("TIMEOUT OFF && DEPOT");
+
+            if (ProductionTimeoutElapsed() && ProductMade) {
+               
                 DepositProduct(c);
             }
-            
+
         }
-        showBlocks();
+        showBlocks(); // Show components acquired
         //return flag;
         return c;
     }
-    
-    void showBlocks(){
-        
-        System.out.println("W"+ SideOfBelt + ": "+ "("+ alpha.type + "," + beta.type +")");
+
+    // Show components acquired
+    void showBlocks() {
+
+        System.out.println("W" + SideOfBelt + ": " + "(" + alpha.type + "," + beta.type + ")");
     }
-    
-    boolean ProductionTimeoutElapsed(){
-    
+
+    boolean ProductionTimeoutElapsed() {
+
         boolean flag = false;
-    
-         if( CurrentTick >= (creationTick + ProductionTime) ){
-             flag = true;
-         }
-         
-         return flag;
-    
-    }
-    
-    boolean isAHandFree(){
-        
-        boolean flag = false;
-        
-       if(LeftHandEmpty && RightHandEmpty){
-            flag = true;
-        } 
-        
-        if(LeftHandEmpty && !RightHandEmpty){
-            flag = true;
-        }else if(!LeftHandEmpty && RightHandEmpty){
+
+        if (CurrentTick >= (creationTick + ProductionTime)) {
             flag = true;
         }
-        
+
         return flag;
-    
+
+    }
+
+    boolean isAHandFree() {
+
+        boolean flag = false;
+
+        if (LeftHandEmpty && RightHandEmpty) {
+            flag = true;
+        }
+
+        if (LeftHandEmpty && !RightHandEmpty) {
+            flag = true;
+        } else if (!LeftHandEmpty && RightHandEmpty) {
+            flag = true;
+        }
+
+        return flag;
+
     }
 
     boolean isComponentTypeA(Component m) {
@@ -178,10 +166,9 @@ public class Worker {
 
         return flag;
     }
-    
-    
-    boolean isEmpty(Component m){
-    
+
+    boolean isEmpty(Component m) {
+
         boolean flag = false;
 
         if (m.type.equals(EmptyType)) {
@@ -189,7 +176,7 @@ public class Worker {
         }
 
         return flag;
-    
+
     }
 
     boolean isComponent(Component m) {
@@ -218,6 +205,7 @@ public class Worker {
 
     }
 
+    // Create a product P or Q depending on components collected
     void CreateProduct(Conveyor c) {
 
         Component AssembledProduct;
@@ -234,27 +222,15 @@ public class Worker {
                         AssembledProduct = new Component("P");
                         product = AssembledProduct;
                         ProductMade = true;
+
                         
-                        //System.out.println("PM");
-                        //System.out.println("p_" +AssembledProduct.type);
-                        
-                        
-                        /*if( creationTick == (creationTick + ProductionTime) ){
-                            DepositProduct(c);
-                        }*/
-                        
-                    } //if (beta.type.equals(betaTypeTwo)) {
+                    }
                     else {
 
-                         AssembledProduct = new Component("Q");
+                        AssembledProduct = new Component("Q");
                         product = AssembledProduct;
                         ProductMade = true;
-                        //c.unlockSlot(WorkerId);
-                       // System.out.println("PM");
-                       // System.out.println("p_" +AssembledProduct.type);
-                        /*if( creationTick == (creationTick + ProductionTime) ){
-                            DepositProduct(c);
-                        }*/
+                        
 
                     }
                 }
@@ -262,103 +238,86 @@ public class Worker {
             }
         }
     }
-    
-    void DepositProduct(Conveyor c){
+
+    // Place the product down on the belt when complete. Function will called continuously each simulation
+    // cycle until product is placed down. Until the no new components will be collected.
+    void DepositProduct(Conveyor c) {
+
         
-        //System.out.println("attempt to deposit");
-        //System.out.println("CaL: " +c.BeltSlots[WorkerId].type);
-        if(isEmpty( c.BeltSlots[WorkerId]) ){
-        
+        if (isEmpty(c.BeltSlots[WorkerId])) {
+
             c.lockSlot(WorkerId);
             c.BeltSlots[WorkerId] = product;
-             c.unlockSlot(WorkerId);
-             
-             //System.out.println("AT DEPOT YES");
-             alpha = new Component("N");
-             beta  = new Component("N");
-             ComponentA_Collected = false;
-             ComponentT_Collected = false;
-                LeftHandEmpty = true;
-                RightHandEmpty = true;
-                ProductMade = false;
-           // c.BeltSlots[WorkerId].isLocked = false;
-       }
-        
-        
-        
-    }
-    
-    void RemoveComponent(Conveyor c){
-        
-        c.BeltSlots[WorkerId] = new Component("N");
-        
-    }
-    
-    
-        int ProposeAction(Conveyor c, int simTick) {
+            c.unlockSlot(WorkerId);
 
-        //boolean flag = false;
+            
+            alpha = new Component("N");
+            beta = new Component("N");
+            ComponentA_Collected = false;
+            ComponentT_Collected = false;
+            LeftHandEmpty = true;
+            RightHandEmpty = true;
+            ProductMade = false;
+           
+        }
+
+    }
+    // Remove a component from the belt and leave an empty slot in its place
+    void RemoveComponent(Conveyor c) {
+
+        c.BeltSlots[WorkerId] = new Component("N");
+
+    }
+
+    // Propose a new possible action to take depending on components in hand and on the belt
+    int ProposeAction(Conveyor c, int simTick) {
+
         int[] vote = new int[1];
-        
+
         CurrentTick = simTick;
 
         if (isComponent(c.BeltSlots[WorkerId]) && isAHandFree() && !c.BeltSlots[WorkerId].isLocked) {
 
-            //is a component ?
-            
-            //System.out.println("IS COMP?" + SideOfBelt);
-            
-            
             boolean isComponentA = isComponentTypeA(c.BeltSlots[WorkerId]);
             if (isComponentA && !ComponentA_Collected && !c.BeltSlots[WorkerId].isLocked) {
 
-                // collect A
+                // collect A type component
                 vote[0] = 1;
             }
-            if (!isComponentA &&!c.BeltSlots[WorkerId].isLocked && !ComponentT_Collected) {
+            if (!isComponentA && !c.BeltSlots[WorkerId].isLocked && !ComponentT_Collected) {
 
-                // collect B or C
+                // collect B or C type component
                 vote[0] = 2;
             }
-            
-            
-            
+
         }
-        
-        if(!isAHandFree()){
-            
-            
-            if(!ProductMade){
-                
+
+        if (!isAHandFree()) {
+
+            if (!ProductMade) {
+
                 creationTick = c.tick;
                 // create product
-                
-                vote[0] = 3;
+
+                //vote[0] = 3;
             }
-            
-            if(ProductionTimeoutElapsed() && ProductMade){
-                
+
+            if (ProductionTimeoutElapsed() && ProductMade) {
+
                 // deposit product
-                
                 vote[0] = 4;
             }
-            
-            if(!ProductionTimeoutElapsed() && ProductMade){
-                
+
+            if (!ProductionTimeoutElapsed() && ProductMade) {
+
                 // still making product - NO ACTION
-                
                 vote[0] = 0;
             }
-            
-            
-            
+
         }
-        
+
         //return flag;
         return vote[0];
     }
-        
-        
-       
 
 }

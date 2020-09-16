@@ -37,14 +37,7 @@ public class Action {
         int action01 = w1.ProposeAction(belt, x);
         int action02 = w2.ProposeAction(belt, x);
         
-        /*System.out.println("A1 : "+ action01);
-        System.out.println("PM1 " + w1.ProductMade);
-        System.out.println("CR tick " + w1.creationTick);
-        System.out.println("TV: " + x);
-        System.out.println("");
-        System.out.println("A2 : "+ action02);
-         System.out.println("PM2 " + w2.ProductMade);
-         System.out.println("CR tick " + w1.creationTick);*/
+       
 
         //Execute proposed actions - resolve any conflicts e.g. taking or placing components/products on the belt at the same time.
         
@@ -54,7 +47,7 @@ public class Action {
         } 
         
         if (action02 == 4 && action01 == 4) {
-                        //System.out.println("ATX 404");
+                       
         }
         // If one worker is still assembling then direct the other worker as to what to do
         else {
@@ -104,7 +97,7 @@ public class Action {
 
         if (!checkA && !isZeroValue(b)) {
             flag = true;
-            // Actions are conflicted if both actions are non zero
+            // Actions are conflicted if both actions are non-zero in value
         }
 
         return flag;
