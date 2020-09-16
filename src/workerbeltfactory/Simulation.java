@@ -112,7 +112,8 @@ public class Simulation {
 
             Conveyorbelt.AddComponentToBelt(Probabilities, parts);
 
-            System.out.println("Before ACQ");
+            System.out.println("Before Acquisition of Parts");
+            System.out.println("NEW COMPONENT ADDED");
             Conveyorbelt.ShowBeltState();
             System.out.println("");
 
@@ -125,8 +126,8 @@ public class Simulation {
                 row1[b] = a1.UpdateWorker1();
                 row2[b] = a1.UpdateWorker2();
                 
-                if(row1[b].isAHandFree()){System.out.println("R1 free hand");}
-                if(row2[b].isAHandFree()){System.out.println("R2 free hand");}
+                //if(row1[b].isAHandFree()){System.out.println("R1 free hand");}
+                //if(row2[b].isAHandFree()){System.out.println("R2 free hand");}
 
             }
 

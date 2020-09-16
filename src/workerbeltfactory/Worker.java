@@ -13,31 +13,31 @@ public class Worker {
 
     boolean LeftHandEmpty;
     boolean RightHandEmpty;
-    boolean ComponentA_Collected;
-    boolean ComponentT_Collected;
+    boolean ComponentA_Collected; // A type component collection flag
+    boolean ComponentT_Collected; // any B or C type component collection flag
     boolean ProductMade;
 
-    int WorkerId;
+    int WorkerId; // index of the worker array used as an ID
     int SideOfBelt = 1;
 
     Component alpha; // type A
     Component beta;  // type B or C
 
-    Component product;
+    Component product; 
 
-    String alphaType = "A";
-    String betaTypeOne = "B";
-    String betaTypeTwo = "C";
+    String alphaType = "A"; // String to check for A type components
+    String betaTypeOne = "B"; // String to check for B type components
+    String betaTypeTwo = "C";   // String to check for C type components
 
-    String EmptyType = "N";
+    String EmptyType = "N"; // String to create empty [component] slot on conveyor when A, B, C component is removed by worker.
 
-    String madeProductOne = "P";
-    String madeProductTwo = "Q";
+    String madeProductOne = "P"; // String to create P component
+    String madeProductTwo = "Q"; // String to create Q component
+     
     
-    
-    int creationTick;
-    int ProductionTime = 4;
-    int CurrentTick;
+    int creationTick; // Simulation time when product assembly starts
+    int ProductionTime = 4; // timeout to wait 4 conveyor movements to simulate assembly time
+    int CurrentTick; // Current simulation time
 
     Worker(int n) {
         LeftHandEmpty = true;
@@ -52,7 +52,7 @@ public class Worker {
 
     }
     
-    Worker(int n, int atime) {
+    Worker(int n, int row) {
         LeftHandEmpty = true;
         RightHandEmpty = true;
 
@@ -62,7 +62,7 @@ public class Worker {
         
         alpha =new Component("N");
         beta =new Component("N");;
-        SideOfBelt = atime;
+        SideOfBelt = row;
         //ProductionTime = atime;
 
     }
@@ -77,7 +77,7 @@ public class Worker {
 
             //is a component ?
             
-            System.out.println("IS COMP?" + SideOfBelt);
+            //System.out.println("IS COMP?" + SideOfBelt);
             
             
             boolean isComponentA = isComponentTypeA(c.BeltSlots[WorkerId]);
@@ -107,23 +107,23 @@ public class Worker {
             }
             
             
-            if(c.BeltSlots[WorkerId].isLocked){
+            /*if(c.BeltSlots[WorkerId].isLocked){
                  System.out.println("Locked by W:"+ WorkerId + "");
-            }
+            }*/
         }
         
         if(!isAHandFree()){
             
-            System.out.println("NHF");
+            //System.out.println("NHF");
             if(!ProductMade){
-                System.out.println("P=NO P=MAKE");
-                System.out.println("BELT TICK -- " + c.tick);
+                //System.out.println("P=NO P=MAKE");
+                //System.out.println("BELT TICK -- " + c.tick);
                 creationTick = c.tick;
                 CreateProduct(c);
             }
             
             if(ProductionTimeoutElapsed() && ProductMade){
-                System.out.println("TIMEOUT OFF && DEPOT");
+                //System.out.println("TIMEOUT OFF && DEPOT");
                 DepositProduct(c);
             }
             
@@ -235,8 +235,8 @@ public class Worker {
                         product = AssembledProduct;
                         ProductMade = true;
                         
-                        System.out.println("PM");
-                        System.out.println("p_" +AssembledProduct.type);
+                        //System.out.println("PM");
+                        //System.out.println("p_" +AssembledProduct.type);
                         
                         
                         /*if( creationTick == (creationTick + ProductionTime) ){
@@ -250,8 +250,8 @@ public class Worker {
                         product = AssembledProduct;
                         ProductMade = true;
                         //c.unlockSlot(WorkerId);
-                        System.out.println("PM");
-                        System.out.println("p_" +AssembledProduct.type);
+                       // System.out.println("PM");
+                       // System.out.println("p_" +AssembledProduct.type);
                         /*if( creationTick == (creationTick + ProductionTime) ){
                             DepositProduct(c);
                         }*/
@@ -265,15 +265,15 @@ public class Worker {
     
     void DepositProduct(Conveyor c){
         
-        System.out.println("attempt to deposit");
-        System.out.println("CaL: " +c.BeltSlots[WorkerId].type);
+        //System.out.println("attempt to deposit");
+        //System.out.println("CaL: " +c.BeltSlots[WorkerId].type);
         if(isEmpty( c.BeltSlots[WorkerId]) ){
         
             c.lockSlot(WorkerId);
             c.BeltSlots[WorkerId] = product;
              c.unlockSlot(WorkerId);
              
-             System.out.println("AT DEPOT YES");
+             //System.out.println("AT DEPOT YES");
              alpha = new Component("N");
              beta  = new Component("N");
              ComponentA_Collected = false;

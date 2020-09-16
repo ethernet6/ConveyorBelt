@@ -5,7 +5,7 @@
  */
 package workerbeltfactory;
 
-import java.util.Random;
+
 import java.security.SecureRandom;
 
 
@@ -14,9 +14,17 @@ import java.security.SecureRandom;
  * @author James
  */
 public class Action {
+    
+    // Possible actions: Action (value)
+    
+    // Action 0 - Assembling or component not needed
+    // Action 1 - Component is an A Type component - take block
+    // Action 2 - Component is a B or C Type component - take block
+    // Action 4 - Return finished porduct to belt
+            
 
-    Worker ww1;
-    Worker ww2;
+    Worker ww1; // Row 1 Worker
+    Worker ww2; // Row 2 Worker
 
     public Action() {
 
@@ -24,26 +32,31 @@ public class Action {
 
     Conveyor getActions(Worker w1, Worker w2, Conveyor belt, int x) {
 
+        // Get workers to propose a new action based on whether they are collecting components
+        // either placing products or still working on their assembly.
         int action01 = w1.ProposeAction(belt, x);
         int action02 = w2.ProposeAction(belt, x);
         
-        System.out.println("A1 : "+ action01);
+        /*System.out.println("A1 : "+ action01);
         System.out.println("PM1 " + w1.ProductMade);
         System.out.println("CR tick " + w1.creationTick);
         System.out.println("TV: " + x);
         System.out.println("");
         System.out.println("A2 : "+ action02);
          System.out.println("PM2 " + w2.ProductMade);
-         System.out.println("CR tick " + w1.creationTick);
+         System.out.println("CR tick " + w1.creationTick);*/
 
+        //Execute proposed actions - resolve any conflicts e.g. taking or placing components/products on the belt at the same time.
+        
+        // Resolve actions based on knowledge of a worker's hands and desired action if both are not still assembling
         if (AreActionsConflicted(action01, action02)) {
             belt = ResolveActions(belt, x, w1, w2);
         } 
         
         if (action02 == 4 && action01 == 4) {
-                        System.out.println("ATX 404");
+                        //System.out.println("ATX 404");
         }
-        
+        // If one worker is still assembling then direct the other worker as to what to do
         else {
 
             if (action02 == 0 && action01 == 0) {
@@ -91,6 +104,7 @@ public class Action {
 
         if (!checkA && !isZeroValue(b)) {
             flag = true;
+            // Actions are conflicted if both actions are non zero
         }
 
         return flag;
@@ -116,6 +130,8 @@ public class Action {
     }
 
     boolean isZeroValue(int d) {
+        
+        // If a worker action is 0 (zero) then they are assembling if not they are collecting blocks or handing in finished products
 
         boolean flag = false;
 

@@ -33,7 +33,7 @@ public class Conveyor {
 
     }
 
-    void SetupBelt(Component[] belt) {
+    private void SetupBelt(Component[] belt) {
 
         for (int q = 0; q < belt.length; q++) {
 
@@ -170,29 +170,19 @@ public class Conveyor {
         double probs[] = p;
         Component assets[] = a;
 
-        //double probs[] = new double[6];
-        //String assets[] = new String[6];
-        /*
-        probs[0] = 0.1;
-        probs[1] = 0.2;
-        probs[2] = 0.3;
-
-        probs[3] = 0.1;
-        probs[4] = 0.1;
-        probs[5] = 0.2;
-        
-        
-        assets[0] = "A";
-        assets[1] = "B";
-        assets[2] = "C";
-
-        assets[3] = "NL";
-        assets[4] = "Q";
-        assets[5] = "Z";
-         */
         double left[] = new double[probs.length];
         double right[] = new double[probs.length];
 
+        //Formulating proability ranges for the cummulative probabilities of each event/block 
+        /**
+         * 
+         * Where 0.0 <= x < 0.2 for P(x) = 0.2 
+         * Where 0.2 <= x < 0.4 for P(y) = 0.3 
+         * 
+         * etc.
+         * 
+         * Where P(x) + P(y) ... P(n) = 1
+         **/
         for (int i = 0; i < probs.length; i++) {
 
             // left side 
@@ -214,15 +204,27 @@ public class Conveyor {
 
         for (int i = 0; i < 1; i++) {
 
-            //System.out.println("ITR " + i);
+            
             Double n = rand.nextDouble();
 
             for (int j = 0; j < probs.length; j++) {
 
                 if (left[j] <= n && n < right[j]) {
-                    //System.out.println("CHK " + left[j] + " <= x <" + right[j]);
-                    //assets[j]
-                    System.out.println("@Conveyor Asset Type: " + assets[j].type);
+                    // using the probabilities provided the item must fall between 
+                    // a set range of probability that is equal to its likelihood of 
+                    // occurring.
+                    
+                    // eg. left[j] <= n && n < right[j]
+                    // is the same as 0.8 <= to 1 for P(x) = 0.2
+                    
+                    // A random number between 0 and  1 is chosen and if it falls between this range
+                    // then the block accoreded this range is the block set as output.
+                    
+                    //System.out.println("@Conveyor Asset Type: " + assets[j].type);
+                    
+                    if(!BeltSlots[0].type.equals("N")){
+                        MoveBelt(); // If there is a component at the start of the belt then move the belt to make room for a new component
+                    }
                     BeltSlots[0] = assets[j];
 
                 }

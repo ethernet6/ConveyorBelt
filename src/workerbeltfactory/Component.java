@@ -11,7 +11,12 @@ package workerbeltfactory;
  */
 public class Component {
     
-    String type;
+    // A B C types are components
+    // P Q   types are products made from  A B C, (A,B) -> P AND (A, C) -> Q
+    // N     types represent empty slots on the conveyor belt 
+           //for components to be taken and products deposited
+    
+    String type; // Component type , A, B, C, P, Q, N
     boolean isLocked;
     
     int lockAuthor;
