@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 
 /**
  *
- * @author James Purcell Date: 6 Sept 2020 Sunday
+ * @author James
  */
 public class WorkerBeltFactory {
     

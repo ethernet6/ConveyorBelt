@@ -109,7 +109,7 @@ public class Simulation {
 
         for (int x = 0; x < SimulationLength; x++) {
 
-            Conveyorbelt.tick = x;
+            Conveyorbelt.tick = x; // Current simulation time step
 
             System.out.println("Step " + (x + 1));
 
@@ -117,7 +117,7 @@ public class Simulation {
 
             System.out.println("Before Acquisition of Parts");
             System.out.println("NEW COMPONENT ADDED");
-            Conveyorbelt.ShowBeltState();
+                Conveyorbelt.ShowBeltState();
             System.out.println("");
 
             for (int b = 0; b < Workstations; b++) {
@@ -125,7 +125,11 @@ public class Simulation {
                 System.out.println("Workstation " + b);
                 Action a1 = new Action();
 
+                // Get new actions proposed by the workers based on belt state and the contents of their hands
+                // Execute the proposed actions and return the new belt state
                 Conveyorbelt = a1.getActions(row1[b], row2[b], Conveyorbelt, x);
+                
+                // Update the workers at this slot on the conveyor belt of the actions taken and any new components taken or placed
                 row1[b] = a1.UpdateWorker1();
                 row2[b] = a1.UpdateWorker2();
                 
@@ -135,7 +139,7 @@ public class Simulation {
 
             Conveyorbelt.MoveBelt();
 
-            System.out.println("After ACQ -- belt moves +1");
+            System.out.println("After Acquisition -- belt moves +1 slot");
             Conveyorbelt.ShowBeltState();
 
         }
@@ -150,7 +154,7 @@ public class Simulation {
 
     public static void main(String[] args) {
 
-        
+        // Components to be made at random
         Component[] AssetsToGenerate = new Component[]{
             new Component("A"),
             new Component("B"),
@@ -158,15 +162,21 @@ public class Simulation {
             new Component("N")
         };
 
+        // The proabilities inidicate the chance the asset in input order will be generated
         double[] discreteProbabilities = new double[]{0.4, 0.2, 0.2, 0.2};
 
-        int SimulationLength = 1;
+        int SimulationLength = 100;
         int ConveyorLength = 6;
-        int WorkstationsUsed = 6;
+        int WorkstationsUsed = 6; // Each slot of the belt will have a station but these may be less than the number of slot of the belt
 
+        // Therefore workers will be placed on both rows 1 & 2 (2 per belt slot)
+        
         Simulation sim = new Simulation(AssetsToGenerate, discreteProbabilities);
 
+        // Setup the simulation - populate the workers, belt and other variables 
         sim.SetupSimulation(WorkstationsUsed, ConveyorLength, SimulationLength);
+        
+        // Run the simulation with the parameters declared above
         sim.RunSimulation();
     }
 }

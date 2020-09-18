@@ -76,8 +76,7 @@ public class Conveyor {
 
     void ShowBeltState() {
 
-        System.out.println("v");
-        System.out.println("^");
+        // Draw the conveyor
 
         for (int a = 0; a < WorkerSlots; a++) {
             if (a == 0) {
@@ -88,18 +87,12 @@ public class Conveyor {
         System.out.println("");
         for (int a = 0; a < BeltSlots.length; a++) {
 
-            if (a < WorkerSlots) {
-
-            }
-
-            if (a == 0) {
-                //System.out.print("-->| ");
-            }
-
+            
+            // Print the conveyor contents at this index
             System.out.print(BeltSlots[a].type + "  | ");
 
         }
-        //System.out.print("-->");
+        
         System.out.println("");
         for (int a = 0; a < WorkerSlots; a++) {
             System.out.print("^    ");
@@ -124,10 +117,10 @@ public class Conveyor {
         double pcomp = 0.0; // P type products total
         double qcomp = 0.0; // Q type products total
 
-        //HashMap<Component, String> hmap = new HashMap<Component, String>();
+        
         for (int a = 0; a < EndOfAssemblyParts.size(); a++) {
 
-            //hmap.put(EndOfAssemblyParts.get(a) , EndOfAssemblyParts.get(a).type );
+            
             if (EndOfAssemblyParts.get(a).type == "P") {
 
                 pcomp++;
@@ -220,11 +213,11 @@ public class Conveyor {
         double left[] = new double[probs.length];
         double right[] = new double[probs.length];
 
-        //Formulating proability ranges for the cummulative probabilities of each event/block 
+        //Formulating proability ranges for the cummulative probabilities of each component 
         /**
-         *
-         * Where 0.0 <= x < 0.2 for P(x) = 0.2 Where 0.2 <= x < 0.4 for P(y) =
-         * 0.3
+         * E.g.
+         * Where 0.0 <= x < 0.2 for P(x) = 0.2 
+         * Where 0.2 <= x < 0.4 for P(y) = 0.3
          *
          * etc.
          *
@@ -263,8 +256,9 @@ public class Conveyor {
 
                     // eg. left[j] <= n && n < right[j]
                     // is the same as 0.8 <= to 1 for P(x) = 0.2
+                    
                     // A random number between 0 and  1 is chosen and if it falls between this range
-                    // then the block accoreded this range is the block set as output.
+                    // then this mathing component is set as the output.
                     
                     if (!BeltSlots[0].type.equals("N")) {
                         MoveBelt(); // If there is a component at the start of the belt then move the belt to make room for a new component
