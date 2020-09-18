@@ -166,8 +166,8 @@ public class Simulation {
         double[] discreteProbabilities = new double[]{0.4, 0.2, 0.2, 0.2};
 
         int SimulationLength = 100;
-        int ConveyorLength = 6;
-        int WorkstationsUsed = 6; // Each slot of the belt will have a station but these may be less than the number of slot of the belt
+        int ConveyorLength = 5;
+        int WorkstationsUsed = 5; // Each slot of the belt will have a station but these may be less than the number of slot of the belt
 
         // Therefore workers will be placed on both rows 1 & 2 (2 per belt slot)
         
