@@ -77,7 +77,6 @@ public class Conveyor {
     void ShowBeltState() {
 
         // Draw the conveyor
-
         for (int a = 0; a < WorkerSlots; a++) {
             if (a == 0) {
 
@@ -87,12 +86,11 @@ public class Conveyor {
         System.out.println("");
         for (int a = 0; a < BeltSlots.length; a++) {
 
-            
             // Print the conveyor contents at this index
             System.out.print(BeltSlots[a].type + "  | ");
 
         }
-        
+
         System.out.println("");
         for (int a = 0; a < WorkerSlots; a++) {
             System.out.print("^    ");
@@ -117,10 +115,8 @@ public class Conveyor {
         double pcomp = 0.0; // P type products total
         double qcomp = 0.0; // Q type products total
 
-        
         for (int a = 0; a < EndOfAssemblyParts.size(); a++) {
 
-            
             if (EndOfAssemblyParts.get(a).type == "P") {
 
                 pcomp++;
@@ -166,7 +162,7 @@ public class Conveyor {
             qr = (qcomp / products * 100);
         }
 
-        System.out.println("Products Made " + products);
+        System.out.println("Products Made: " + products);
         System.out.printf("P Type: " + pcomp + "   Ratio: %.1f", pr);
         System.out.print("%");
         System.out.println("");
@@ -174,11 +170,16 @@ public class Conveyor {
         System.out.print("%");
         System.out.println("");
         System.out.println("-------------------------------------");
-        System.out.println("Components not used : " + ((EndOfAssemblyParts.size() - products) - ncomp));
-        System.out.println("");
+        
+        System.out.println("Empty slots recorded, [N]: " + ncomp);
+        System.out.println("-------------------------------------");
 
         double cmp = ((EndOfAssemblyParts.size() - products) - ncomp);
+        System.out.println("Components Not Used : " + cmp);
 
+        
+
+        System.out.println("");
         double ar = 0.0;
         double br = 0.0;
         double cr = 0.0;
@@ -201,7 +202,9 @@ public class Conveyor {
         System.out.printf("C Type: " + ccomp + "    Ratio: %.1f", cr);
         System.out.print("%");
         System.out.println("");
-        System.out.println("[N] Type: " + ncomp);
+        System.out.println("");
+        
+        //System.out.println("N,Empty: " + ncomp);
 
     }
 
@@ -215,8 +218,7 @@ public class Conveyor {
 
         //Formulating proability ranges for the cummulative probabilities of each component 
         /**
-         * E.g.
-         * Where 0.0 <= x < 0.2 for P(x) = 0.2 
+         * E.g. Where 0.0 <= x < 0.2 for P(x) = 0.2 
          * Where 0.2 <= x < 0.4 for P(y) = 0.3
          *
          * etc.
@@ -256,10 +258,8 @@ public class Conveyor {
 
                     // eg. left[j] <= n && n < right[j]
                     // is the same as 0.8 <= to 1 for P(x) = 0.2
-                    
                     // A random number between 0 and  1 is chosen and if it falls between this range
                     // then this mathing component is set as the output.
-                    
                     if (!BeltSlots[0].type.equals("N")) {
                         MoveBelt(); // If there is a component at the start of the belt then move the belt to make room for a new component
                     }

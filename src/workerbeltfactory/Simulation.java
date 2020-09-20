@@ -146,13 +146,15 @@ public class Simulation {
 
         System.out.println("");
         System.out.println("");
-        System.out.println("END OF SIMULATION");
+        System.out.println("------- END OF SIMULATION -------");
         System.out.println("");
         Conveyorbelt.ComputeStats();
 
     }
 
     public static void main(String[] args) {
+        
+        //Final
 
         // Components to be made at random
         Component[] AssetsToGenerate = new Component[]{
@@ -178,5 +180,7 @@ public class Simulation {
         
         // Run the simulation with the parameters declared above
         sim.RunSimulation();
+        
+        System.out.println("------- END OF PROGRAM -------");
     }
 }

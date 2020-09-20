@@ -47,7 +47,7 @@ public class Worker {
         WorkerId = n;
 
         alpha = new Component("N");
-        beta = new Component("N");;
+        beta = new Component("N");
 
     }
 
